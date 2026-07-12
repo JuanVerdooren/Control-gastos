@@ -13,8 +13,13 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
       <tbody>
         {movimientos.map((movimiento) => (
           <tr key={movimiento._id}>
-            <td>{new Date(movimiento.fecha).toLocaleDateString("es-CO")}</td>
-
+            <td className="fecha-columna">
+              {new Date(movimiento.fecha).toLocaleDateString("es-CO", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+              })}
+            </td>
             <td>{movimiento.descripcion}</td>
 
             <td
@@ -31,7 +36,7 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
               })}
             </td>
 
-            <td className="text-center" >
+            <td className="text-center">
               <div className="d-flex flex-column flex-md-row gap-1 align-items-center justify-content-center">
                 <button
                   className="btn btn-warning btn-sm btn-accion"
