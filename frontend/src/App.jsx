@@ -54,7 +54,8 @@ function App() {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid container-lg mt-3 px-3">
+      {" "}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">Control de Ingresos y Egresos</h2>
 
@@ -67,7 +68,6 @@ function App() {
           />
         </div>
       </div>
-
       {/* Tarjetas con ingresos, egresos y balance */}
       <Resumen movimientos={movimientosFiltrados} />
       <FormularioMovimiento
@@ -82,8 +82,6 @@ function App() {
       />
     </div>
   );
-
-  
 }
 
 export default App;
