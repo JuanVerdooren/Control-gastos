@@ -5,7 +5,7 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
         <tr>
           <th>Fecha</th>
           <th>Descripción</th>
-          <th className="text-end">Valor</th>
+          <th className="text-center">Valor</th>
           <th className="text-center">Acciones</th>
         </tr>
       </thead>
@@ -18,7 +18,7 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
             <td>{movimiento.descripcion}</td>
 
             <td
-              className={`text-end fw-bold ${
+              className={`text-center fw-bold ${
                 movimiento.tipo === "ingreso" ? "text-success" : "text-danger"
               }`}
             >
