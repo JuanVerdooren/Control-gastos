@@ -109,3 +109,56 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+
+
+.movimientos-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.movimientos-table th:nth-child(1),
+.movimientos-table td:nth-child(1) {
+  width: 90px;
+}
+
+.movimientos-table th:nth-child(2),
+.movimientos-table td:nth-child(2) {
+  width: 80px;
+}
+
+.movimientos-table th:nth-child(4),
+.movimientos-table td:nth-child(4) {
+  width: 130px;
+  white-space: nowrap;
+}
+
+.movimientos-table th:nth-child(5),
+.movimientos-table td:nth-child(5) {
+  width: 140px;
+  white-space: nowrap;
+}
+
+.descripcion {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+@media (max-width: 600px) {
+
+  .movimientos-table {
+    font-size: 13px;
+  }
+
+  .movimientos-table .btn {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+}
+html,
+body {
+  overflow-x: hidden;
+}
