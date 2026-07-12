@@ -109,3 +109,15 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+.btn-accion {
+  width: 80px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .btn-accion {
+    width: 65px;
+    font-size: 11px;
+    padding: 3px 5px;
+  }
+}

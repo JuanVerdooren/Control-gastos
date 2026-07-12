@@ -34,14 +34,14 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
             <td className="text-center">
               <div className="d-flex flex-column flex-md-row gap-1 align-items-center justify-content-center">
                 <button
-                  className="btn btn-warning btn-sm"
+                  className="btn btn-warning btn-sm btn-accion"
                   onClick={() => onEditar(movimiento)}
                 >
                   Editar
                 </button>
 
                 <button
-                  className="btn btn-danger btn-sm"
+                  className="btn btn-danger btn-sm btn-accion"
                   onClick={() => onEliminar(movimiento._id)}
                 >
                   Eliminar
