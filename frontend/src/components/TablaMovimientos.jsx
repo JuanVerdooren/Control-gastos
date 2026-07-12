@@ -13,19 +13,13 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
       <tbody>
         {movimientos.map((movimiento) => (
           <tr key={movimiento._id}>
-            <td>
-              {new Date(movimiento.fecha).toLocaleDateString("es-CO")}
-            </td>
+            <td>{new Date(movimiento.fecha).toLocaleDateString("es-CO")}</td>
 
-            <td>
-              {movimiento.descripcion}
-            </td>
+            <td>{movimiento.descripcion}</td>
 
             <td
               className={`text-end fw-bold ${
-                movimiento.tipo === "ingreso"
-                  ? "text-success"
-                  : "text-danger"
+                movimiento.tipo === "ingreso" ? "text-success" : "text-danger"
               }`}
             >
               {movimiento.tipo === "egreso" ? "-" : "+"}
@@ -38,19 +32,21 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
             </td>
 
             <td className="text-center">
-              <button
-                className="btn btn-warning btn-sm me-2"
-                onClick={() => onEditar(movimiento)}
-              >
-                Editar
-              </button>
+              <div className="d-flex flex-column flex-md-row gap-1 align-items-center justify-content-center">
+                <button
+                  className="btn btn-warning btn-sm"
+                  onClick={() => onEditar(movimiento)}
+                >
+                  Editar
+                </button>
 
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => onEliminar(movimiento._id)}
-              >
-                Eliminar
-              </button>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => onEliminar(movimiento._id)}
+                >
+                  Eliminar
+                </button>
+              </div>
             </td>
           </tr>
         ))}
