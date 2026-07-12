@@ -31,7 +31,7 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
               })}
             </td>
 
-            <td className="text-center">
+            <td className="text-center" >
               <div className="d-flex flex-column flex-md-row gap-1 align-items-center justify-content-center">
                 <button
                   className="btn btn-warning btn-sm btn-accion"
