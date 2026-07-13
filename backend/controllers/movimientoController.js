@@ -3,7 +3,10 @@ import Movimiento from "../models/Movimiento.js";
 // Obtener todos
 export const obtenerMovimientos = async (req, res) => {
   try {
-    const movimientos = await Movimiento.find().sort({ fecha: -1 });
+    const movimientos = await Movimiento.find().sort({
+      fecha: -1,
+      createdAt: -1,
+    });
 
     res.json(movimientos);
   } catch (error) {
