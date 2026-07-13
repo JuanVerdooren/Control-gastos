@@ -14,11 +14,12 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
         {movimientos.map((movimiento) => (
           <tr key={movimiento._id}>
             <td className="fecha-columna">
-              {new Date(movimiento.fecha).toLocaleDateString("es-CO", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "2-digit",
-              })}
+              {(() => {
+                const [anio, mes, dia] = movimiento.fecha
+                  .slice(0, 10)
+                  .split("-");
+                return `${dia}/${mes}/${anio.slice(2)}`;
+              })()}
             </td>
             <td>{movimiento.descripcion}</td>
 

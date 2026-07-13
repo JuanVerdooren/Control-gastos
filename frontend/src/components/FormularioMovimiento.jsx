@@ -3,6 +3,16 @@ import api from "../services/api";
 import { NumericFormat } from "react-number-format";
 import Swal from "sweetalert2";
 
+const obtenerFechaActual = () => {
+  const fecha = new Date();
+
+  const año = fecha.getFullYear();
+  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+  const dia = String(fecha.getDate()).padStart(2, "0");
+
+  return `${año}-${mes}-${dia}`;
+};
+
 function FormularioMovimiento({
   onGuardar,
   movimientoEditar,
@@ -12,7 +22,7 @@ function FormularioMovimiento({
     tipo: "ingreso",
     descripcion: "",
     valor: "",
-    fecha: new Date().toISOString().split("T")[0],
+    fecha: obtenerFechaActual(),
   });
 
   useEffect(() => {
@@ -21,7 +31,7 @@ function FormularioMovimiento({
         tipo: movimientoEditar.tipo,
         descripcion: movimientoEditar.descripcion,
         valor: movimientoEditar.valor,
-        fecha: movimientoEditar.fecha.split("T")[0],
+        fecha: movimientoEditar.fecha.substring(0, 10),
       });
     }
   }, [movimientoEditar]);
@@ -38,7 +48,7 @@ function FormularioMovimiento({
       tipo: "ingreso",
       descripcion: "",
       valor: "",
-      fecha: new Date().toISOString().split("T")[0],
+      fecha: obtenerFechaActual(),
     });
 
     setMovimientoEditar(null);
@@ -48,12 +58,22 @@ function FormularioMovimiento({
     e.preventDefault();
 
     if (!formulario.descripcion.trim()) {
-      alert("Ingrese una descripción");
+      Swal.fire({
+        icon: "warning",
+        title: "Descripción requerida",
+        text: "Ingrese una descripción",
+      });
+
       return;
     }
 
     if (Number(formulario.valor) <= 0) {
-      alert("Ingrese un valor válido");
+      Swal.fire({
+        icon: "warning",
+        title: "Valor inválido",
+        text: "Ingrese un valor mayor a cero",
+      });
+
       return;
     }
 
@@ -71,22 +91,32 @@ function FormularioMovimiento({
       }
 
       limpiarFormulario();
+
       onGuardar();
 
       Swal.fire({
         icon: "success",
+
         title: movimientoEditar
           ? "Movimiento actualizado"
           : "Movimiento creado",
+
         text: movimientoEditar
           ? "El movimiento fue actualizado correctamente"
           : "El movimiento fue guardado correctamente",
+
         timer: 2000,
+
         showConfirmButton: false,
       });
     } catch (error) {
       console.error(error);
-      alert("Error al guardar el movimiento");
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo guardar el movimiento",
+      });
     }
   };
 
@@ -111,6 +141,7 @@ function FormularioMovimiento({
                 onChange={handleChange}
               >
                 <option value="ingreso">Ingreso</option>
+
                 <option value="egreso">Egreso</option>
               </select>
             </div>
@@ -140,6 +171,7 @@ function FormularioMovimiento({
                 onValueChange={(values) =>
                   setFormulario({
                     ...formulario,
+
                     valor: values.floatValue || "",
                   })
                 }
