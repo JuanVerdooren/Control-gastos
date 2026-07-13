@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const movimientoSchema = new mongoose.Schema(
   {
+    usuario: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Usuario",
+      required: true,
+    },
+
     tipo: {
       type: String,
       enum: ["ingreso", "egreso"],

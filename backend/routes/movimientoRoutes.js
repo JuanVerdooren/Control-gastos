@@ -1,5 +1,7 @@
 import express from "express";
 
+import verificarToken from "../middleware/authMiddleware.js";
+
 import {
   obtenerMovimientos,
   obtenerMovimiento,
@@ -10,14 +12,14 @@ import {
 
 const router = express.Router();
 
-router.get("/", obtenerMovimientos);
+router.get("/", verificarToken, obtenerMovimientos);
 
-router.get("/:id", obtenerMovimiento);
+router.get("/:id", verificarToken, obtenerMovimiento);
 
-router.post("/", crearMovimiento);
+router.post("/", verificarToken, crearMovimiento);
 
-router.put("/:id", actualizarMovimiento);
+router.put("/:id", verificarToken, actualizarMovimiento);
 
-router.delete("/:id", eliminarMovimiento);
+router.delete("/:id", verificarToken, eliminarMovimiento);
 
 export default router;

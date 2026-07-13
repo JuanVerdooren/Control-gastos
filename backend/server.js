@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import conectarDB from "./config/db.js";
 
 import movimientoRoutes from "./routes/movimientoRoutes.js";
+import usuarioRoutes from "./routes/usuarioRoutes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/movimientos", movimientoRoutes);
+app.use("/api/usuarios", usuarioRoutes);
 
 const PORT = process.env.PORT || 3001;
 
