@@ -131,6 +131,29 @@ function FormularioMovimiento({
     }
   };
 
+  const confirmarReporte = () => {
+    Swal.fire({
+      title: "Generar Extracto",
+      html: `
+      <p>Se generará el extracto financiero del mes:</p>
+      <h4 style="color:#198754; margin-top:10px;">
+        ${mesSeleccionado}
+      </h4>
+    `,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#198754",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Generar PDF",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        generarExtracto(movimientos, mesSeleccionado);
+      }
+    });
+  };
+
   return (
     <div className="card border-0 shadow rounded-3 mb-4">
       <div className="card-header bg-success text-white rounded-top-4 py-3 px-3 d-flex justify-content-between align-items-center">
@@ -139,11 +162,11 @@ function FormularioMovimiento({
         </strong>
 
         <button
-          className="btn btn-light btn-sm d-flex align-items-center gap-1"
-          onClick={() => generarExtracto(movimientos, mesSeleccionado)}
+          className="btn btn-light btn-sm rounded-pill px-3 shadow-sm"
+          onClick={confirmarReporte}
         >
-          <FaFilePdf className="me-1" />
-          Generar PDF
+          <FaFilePdf className="text-black me-2" />
+          PDF
         </button>
       </div>
 
