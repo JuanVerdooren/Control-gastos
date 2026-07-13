@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import api from "../services/api";
 import { NumericFormat } from "react-number-format";
 import Swal from "sweetalert2";
+import { FaFilePdf } from "react-icons/fa";
+import generarExtracto from "../reportes/generarExtracto";
 
 const obtenerFechaActual = () => {
   const fecha = new Date();
@@ -17,6 +19,8 @@ function FormularioMovimiento({
   onGuardar,
   movimientoEditar,
   setMovimientoEditar,
+  movimientos,
+  mesSeleccionado,
 }) {
   const [formulario, setFormulario] = useState({
     tipo: "ingreso",
@@ -122,10 +126,18 @@ function FormularioMovimiento({
 
   return (
     <div className="card mb-4 shadow-sm">
-      <div className="card-header">
+      <div className="card-header d-flex justify-content-between align-items-center">
         <strong>
           {movimientoEditar ? "Editar Movimiento" : "Nuevo Movimiento"}
         </strong>
+
+        <button
+          className="btn btn-sm"
+          onClick={() => generarExtracto(movimientos, mesSeleccionado)}
+        >
+          <FaFilePdf className="me-1" />
+          Generar PDF
+        </button>
       </div>
 
       <div className="card-body">

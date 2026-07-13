@@ -97,6 +97,8 @@ function App() {
         onGuardar={cargarMovimientos}
         movimientoEditar={movimientoEditar}
         setMovimientoEditar={setMovimientoEditar}
+        movimientos={movimientosFiltrados}
+        mesSeleccionado={mesSeleccionado}
       />
       <TablaMovimientos
         movimientos={movimientosFiltrados}
