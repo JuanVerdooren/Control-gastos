@@ -24,7 +24,7 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
             <td>{movimiento.descripcion}</td>
 
             <td
-              className={`text-center fw-bold ${
+              className={`text-center fw-bold text-nowrap ${
                 movimiento.tipo === "ingreso" ? "text-success" : "text-danger"
               }`}
             >
