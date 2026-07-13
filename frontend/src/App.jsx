@@ -85,16 +85,34 @@ function App() {
   return (
     <div className="container-fluid container-lg mt-3 px-3">
       {" "}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0">Control de Ingresos y Egresos</h2>
+      <div className="card border-0 shadow-sm rounded-4 mb-4">
+        <div className="card-body d-flex flex-column flex-md-row justify-content-between align-items-center gap-4">
+          <div className="d-flex flex-column flex-sm-row align-items-center text-center text-md-start">
+            <img
+              src="/cb36ee16-a4e4-4336-b898-8e387c57db25.png"
+              alt="FinControl"
+              width="50"
+              height="50"
+              className="me-md-3 mb-2 mb-sm-0"
+            />
 
-        <div style={{ width: "180px" }}>
-          <input
-            type="month"
-            className="form-control"
-            value={mesSeleccionado}
-            onChange={(e) => setMesSeleccionado(e.target.value)}
-          />
+            <div>
+              <h2 className="fw-bold text-success mb-1">FinControl</h2>
+
+              <small className="text-muted">
+                Control de ingresos y egresos
+              </small>
+            </div>
+          </div>
+
+          <div className="w-100 w-md-auto" style={{ maxWidth: "220px" }}>
+            <input
+              type="month"
+              className="form-control border-success fw-semibold text-center"
+              value={mesSeleccionado}
+              onChange={(e) => setMesSeleccionado(e.target.value)}
+            />
+          </div>
         </div>
       </div>
       {/* Tarjetas con ingresos, egresos y balance */}
