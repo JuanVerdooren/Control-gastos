@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../services/api";
 import { NumericFormat } from "react-number-format";
+import Swal from "sweetalert2";
 
 function FormularioMovimiento({
   onGuardar,
@@ -71,6 +72,18 @@ function FormularioMovimiento({
 
       limpiarFormulario();
       onGuardar();
+
+      Swal.fire({
+        icon: "success",
+        title: movimientoEditar
+          ? "Movimiento actualizado"
+          : "Movimiento creado",
+        text: movimientoEditar
+          ? "El movimiento fue actualizado correctamente"
+          : "El movimiento fue guardado correctamente",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error(error);
       alert("Error al guardar el movimiento");

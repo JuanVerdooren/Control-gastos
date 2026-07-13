@@ -3,6 +3,7 @@ import api from "./services/api";
 import Resumen from "./components/Resumen";
 import FormularioMovimiento from "./components/FormularioMovimiento";
 import TablaMovimientos from "./components/TablaMovimientos";
+import Swal from "sweetalert2";
 
 function App() {
   const [movimientos, setMovimientos] = useState([]);
@@ -36,16 +37,37 @@ function App() {
   });
 
   const eliminarMovimiento = async (id) => {
-    const confirmar = window.confirm("¿Desea eliminar este movimiento?");
+    const confirmar = await Swal.fire({
+      title: "¿Eliminar movimiento?",
+      text: "Esta acción no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
 
-    if (!confirmar) return;
+    if (!confirmar.isConfirmed) return;
 
     try {
       await api.delete(`/movimientos/${id}`);
 
       cargarMovimientos();
+
+      Swal.fire({
+        icon: "success",
+        title: "Movimiento eliminado",
+        text: "El movimiento fue eliminado correctamente",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error(error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo eliminar el movimiento",
+      });
     }
   };
 
