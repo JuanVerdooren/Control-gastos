@@ -44,6 +44,7 @@ function App() {
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
+      confirmButtonColor: "#dc3545",
     });
 
     if (!confirmar.isConfirmed) return;
