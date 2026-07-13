@@ -91,8 +91,8 @@ function App() {
             <img
               src="/cb36ee16-a4e4-4336-b898-8e387c57db25.png"
               alt="FinControl"
-              width="50"
-              height="50"
+              width="100"
+              height="100"
               className="me-md-3 mb-2 mb-sm-0"
             />
 
