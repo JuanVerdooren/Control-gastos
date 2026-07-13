@@ -36,6 +36,12 @@ function App() {
     return mes === mesSeleccionado;
   });
 
+  const saldoTotal = movimientos.reduce((saldo, movimiento) => {
+    return movimiento.tipo === "ingreso"
+      ? saldo + movimiento.valor
+      : saldo - movimiento.valor;
+  }, 0);
+
   const eliminarMovimiento = async (id) => {
     const confirmar = await Swal.fire({
       title: "¿Eliminar movimiento?",
@@ -92,7 +98,7 @@ function App() {
         </div>
       </div>
       {/* Tarjetas con ingresos, egresos y balance */}
-      <Resumen movimientos={movimientosFiltrados} />
+      <Resumen movimientos={movimientosFiltrados} saldoTotal={saldoTotal} />
       <FormularioMovimiento
         onGuardar={cargarMovimientos}
         movimientoEditar={movimientoEditar}

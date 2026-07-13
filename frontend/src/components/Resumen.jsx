@@ -1,4 +1,11 @@
-function Resumen({ movimientos }) {
+import {
+  FaArrowUp,
+  FaArrowDown,
+  FaBalanceScale,
+  FaWallet,
+} from "react-icons/fa";
+
+function Resumen({ movimientos, saldoTotal }) {
   const ingresos = movimientos
     .filter((m) => m.tipo === "ingreso")
     .reduce((total, m) => total + m.valor, 0);
@@ -17,31 +24,56 @@ function Resumen({ movimientos }) {
     });
 
   return (
-    <div className="row mb-4">
+    <div className="row g-3 mb-4">
 
-      <div className="col-md-4">
-        <div className="card border-success">
-          <div className="card-body text-center">
-            <h5>Ingresos</h5>
-            <h3 className="text-success">{formato(ingresos)}</h3>
+      {/* Ingresos */}
+      <div className="col-6 col-md-6">
+        <div className="card shadow border-0 rounded-4 h-100">
+          <div className="card-body text-center py-4">
+            <FaArrowUp size={35} className="text-success mb-3" />
+            <h6 className="text-muted">Ingresos</h6>
+            <h3 className="fw-bold text-success">
+              {formato(ingresos)}
+            </h3>
           </div>
         </div>
       </div>
 
-      <div className="col-md-4">
-        <div className="card border-danger">
-          <div className="card-body text-center">
-            <h5>Egresos</h5>
-            <h3 className="text-danger">{formato(egresos)}</h3>
+      {/* Egresos */}
+      <div className="col-6 col-md-6">
+        <div className="card shadow border-0 rounded-4 h-100">
+          <div className="card-body text-center py-4">
+            <FaArrowDown size={35} className="text-danger mb-3" />
+            <h6 className="text-muted">Egresos</h6>
+            <h3 className="fw-bold text-danger">
+              {formato(egresos)}
+            </h3>
           </div>
         </div>
       </div>
 
-      <div className="col-md-4">
-        <div className="card border-primary">
-          <div className="card-body text-center">
-            <h5>Balance</h5>
-            <h3 className="text-primary">{formato(balance)}</h3>
+      {/* Balance */}
+      <div className="col-6 col-md-6">
+        <div className="card shadow border-0 rounded-4 h-100">
+          <div className="card-body text-center py-4">
+            <FaBalanceScale size={35} className="text-primary mb-3" />
+            <h6 className="text-muted">Balance del Mes</h6>
+            <h3 className="fw-bold text-primary">
+              {formato(balance)}
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      {/* Saldo Total */}
+      <div className="col-6 col-md-6">
+        <div className="card shadow border-0 rounded-4 h-100">
+          <div className="card-body text-center py-4">
+            <FaWallet size={35} className="text-warning mb-3" />
+            <h6 className="text-muted">Saldo Total</h6>
+            <h3 className="fw-bold text-warning">
+              {formato(saldoTotal)}
+            </h3>
           </div>
         </div>
       </div>

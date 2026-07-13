@@ -1,8 +1,28 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import QRCode from "qrcode";
 
-const generarExtracto = (movimientos, mes) => {
+// ===========================
+// CARGAR LOGO
+// ===========================
+
+const cargarLogo = () => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+
+    img.crossOrigin = "anonymous";
+    img.src =
+      window.location.origin + "/cb36ee16-a4e4-4336-b898-8e387c57db25.png";
+
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+  });
+};
+
+const generarExtracto = async (movimientos, mes) => {
   const doc = new jsPDF();
+
+  const logo = await cargarLogo();
 
   // ===========================
   // CÁLCULOS
@@ -22,12 +42,21 @@ const generarExtracto = (movimientos, mes) => {
   // ENCABEZADO
   // ===========================
 
+  // Logo
+  doc.addImage(logo, "PNG", 15, 10, 22, 22);
+
+  // Título
   doc.setFont("helvetica", "bold");
   doc.setFontSize(20);
-  doc.text("CONTROL DE GASTOS", 105, 20, { align: "center" });
+  doc.text("FINCONTROL", 105, 20, {
+    align: "center",
+  });
 
+  // Subtítulo
   doc.setFontSize(14);
-  doc.text("EXTRACTO MENSUAL", 105, 30, { align: "center" });
+  doc.text("EXTRACTO MENSUAL", 105, 30, {
+    align: "center",
+  });
 
   doc.setDrawColor(180);
   doc.line(15, 38, 195, 38);
@@ -40,7 +69,7 @@ const generarExtracto = (movimientos, mes) => {
   doc.text(
     `Fecha de generación: ${new Date().toLocaleString("es-CO")}`,
     15,
-    56
+    56,
   );
 
   // ===========================
@@ -61,7 +90,7 @@ const generarExtracto = (movimientos, mes) => {
       minimumFractionDigits: 0,
     })}`,
     20,
-    80
+    80,
   );
 
   doc.text(
@@ -71,7 +100,7 @@ const generarExtracto = (movimientos, mes) => {
       minimumFractionDigits: 0,
     })}`,
     20,
-    88
+    88,
   );
 
   doc.text(
@@ -81,7 +110,7 @@ const generarExtracto = (movimientos, mes) => {
       minimumFractionDigits: 0,
     })}`,
     20,
-    96
+    96,
   );
 
   doc.text(`Movimientos registrados: ${movimientos.length}`, 20, 104);
@@ -147,15 +176,33 @@ const generarExtracto = (movimientos, mes) => {
 
   doc.setFontSize(10);
 
-  doc.text(
-    "Documento generado automáticamente por Control de Gastos",
-    105,
-    ultimaY + 10,
-    {
-      align: "center",
-    }
+  // ===========================
+  // CÓDIGO QR
+  // ===========================
+
+  const qr = await QRCode.toDataURL(
+    "https://control-gastos-git-master-juan-verdoorens-projects.vercel.app/",
   );
 
+  // Texto
+  doc.setFontSize(10);
+
+  doc.text(
+    "Documento generado automáticamente por FinControl",
+    70,
+    ultimaY + 10,
+  );
+
+  doc.text(
+    "Escanee el código QR para acceder a la aplicación",
+    70,
+    ultimaY + 18,
+  );
+
+  // QR
+  doc.addImage(qr, "PNG", 160, ultimaY + 2, 30, 30);
+
+  // Guardar PDF
   doc.save(`Extracto_${mes}.pdf`);
 };
 
