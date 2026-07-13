@@ -110,6 +110,7 @@ function App() {
         movimientos={movimientosFiltrados}
         onEliminar={eliminarMovimiento}
         onEditar={editarMovimiento}
+        onActualizar={cargarMovimientos}
       />
     </div>
   );

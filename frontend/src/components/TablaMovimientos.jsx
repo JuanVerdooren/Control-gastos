@@ -4,9 +4,22 @@ import {
   FaListAlt,
   FaArrowCircleUp,
   FaArrowCircleDown,
+  FaSyncAlt,
 } from "react-icons/fa";
+import { useState } from "react";
 
-function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
+function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
+  const [actualizando, setActualizando] = useState(false);
+
+  const actualizarMovimientos = async () => {
+    setActualizando(true);
+
+    await onActualizar();
+
+    setTimeout(() => {
+      setActualizando(false);
+    }, 500);
+  };
   return (
     <div className="card border-0 shadow rounded-4 mb-4">
       <div className="card-header bg-success text-white rounded-top-4 py-2 d-flex justify-content-center align-items-center">
@@ -14,6 +27,22 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar }) {
           <FaListAlt className="me-2 mb-1" />
           Movimientos
         </h5>
+
+        <button
+          className="btn btn-light btn-sm rounded-circle ms-auto"
+          title="Actualizar movimientos"
+          onClick={actualizarMovimientos}
+          disabled={actualizando}
+        >
+          {actualizando ? (
+            <span
+              className="spinner-border spinner-border-sm text-success"
+              role="status"
+            />
+          ) : (
+            <FaSyncAlt size={14} />
+          )}
+        </button>
       </div>
 
       <div className="card-body">
