@@ -1,10 +1,17 @@
 import { useState } from "react";
 import api from "./services/api";
-
+import {
+  FaEnvelope,
+  FaLock,
+  FaSignInAlt,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 function Login({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const ingresar = async (e) => {
     e.preventDefault();
@@ -24,36 +31,101 @@ function Login({ onLogin }) {
       setError(error.response?.data?.mensaje || "Error al iniciar sesión");
     }
   };
-
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-4">
-          <div className="card shadow rounded-4">
-            <div className="card-body">
-              <h2 className="text-center mb-4">FinControl</h2>
+    <div
+      className="container-fluid min-vh-100 d-flex justify-content-center align-items-center"
+      style={{ background: "#f5f7fa" }}
+    >
+      <div className="col-11 col-sm-8 col-md-7 col-lg-5 col-xl-4">
+        {" "}
+        <div className="card border-0 shadow-lg rounded-4">
+          <div className="card-body p-4">
+            <div className="text-center mb-4">
+              <img
+                src="/cb36ee16-a4e4-4336-b898-8e387c57db25.png"
+                alt="FinControl"
+                width="80"
+                className="mb-3"
+              />
 
-              {error && <div className="alert alert-danger">{error}</div>}
+              <h2 className="fw-bold text-success mb-1">FinControl</h2>
 
-              <form onSubmit={ingresar}>
+              <p className="text-muted mb-0">Inicia sesión para continuar</p>
+            </div>
+
+            {error && (
+              <div className="alert alert-danger rounded-3">{error}</div>
+            )}
+
+            <form onSubmit={ingresar}>
+              <div className="input-group mb-3">
+                <span className="input-group-text bg-success text-white">
+                  <FaEnvelope />
+                </span>
+
                 <input
-                  className="form-control mb-3"
+                  className="form-control"
                   type="email"
-                  placeholder="Correo"
+                  placeholder="Correo electrónico"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+              </div>
 
-                <input
-                  className="form-control mb-3"
-                  type="password"
-                  placeholder="Contraseña"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+              <div className="mb-4">
+                <label className="form-label fw-semibold">Contraseña</label>
 
-                <button className="btn btn-success w-100">Ingresar</button>
-              </form>
+                <div className="position-relative">
+                  <FaLock
+                    className="position-absolute text-success"
+                    style={{
+                      left: "15px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                    }}
+                  />
+
+                  <input
+                    className="form-control ps-5 pe-5"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Ingrese su contraseña"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="btn border-0 position-absolute"
+                    style={{
+                      right: "10px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "transparent",
+                      boxShadow: "none",
+                    }}
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash className="text-secondary" />
+                    ) : (
+                      <FaEye className="text-secondary" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <button className="btn btn-success w-100 rounded-3 py-2 fw-semibold">
+                <FaSignInAlt className="me-2" />
+                Ingresar
+              </button>
+            </form>
+
+            <hr />
+
+            <div className="text-center">
+              <small className="text-muted">
+                © {new Date().getFullYear()} FinControl
+              </small>
             </div>
           </div>
         </div>
