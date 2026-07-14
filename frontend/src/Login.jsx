@@ -76,18 +76,29 @@ function Login({ onLogin }) {
             )}
 
             <form onSubmit={ingresar}>
-              <div className="input-group mb-3">
-                <span className="input-group-text bg-success text-white">
-                  <FaEnvelope />
-                </span>
+              <div className="mb-3">
+                <label className="form-label fw-semibold">
+                  Correo electrónico
+                </label>
 
-                <input
-                  className="form-control"
-                  type="email"
-                  placeholder="Correo electrónico"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+                <div className="position-relative">
+                  <FaEnvelope
+                    className="position-absolute text-success"
+                    style={{
+                      left: "15px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                    }}
+                  />
+
+                  <input
+                    className="form-control ps-5"
+                    type="email"
+                    placeholder="Ingrese su correo electrónico"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
               </div>
 
               <div className="mb-4">
