@@ -5,11 +5,13 @@ import {
   FaArrowCircleUp,
   FaArrowCircleDown,
   FaSyncAlt,
+  FaChevronDown,
 } from "react-icons/fa";
 import { useState } from "react";
 
 function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
   const [actualizando, setActualizando] = useState(false);
+  const [cantidadVisible, setCantidadVisible] = useState(5);
 
   const actualizarMovimientos = async () => {
     setActualizando(true);
@@ -20,6 +22,8 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
       setActualizando(false);
     }, 500);
   };
+
+  const movimientosVisibles = movimientos.slice(0, cantidadVisible);
   return (
     <div className="card border-0 shadow rounded-4 mb-4">
       <div className="card-header bg-success text-white rounded-top-4 py-2 d-flex justify-content-center align-items-center">
@@ -52,7 +56,7 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
           </div>
         ) : (
           <div className="d-flex flex-column gap-3">
-            {movimientos.map((movimiento) => {
+            {movimientosVisibles.map((movimiento) => {
               const [anio, mes, dia] = movimiento.fecha.slice(0, 10).split("-");
 
               const fecha = `${dia}/${mes}/${anio.slice(2)}`;
@@ -123,6 +127,17 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
           </div>
         )}
       </div>
+      {cantidadVisible < movimientos.length && (
+        <div className="text-center">
+          <button
+            className="btn btn-light mb-2 border border-success text-success rounded-pill px-4 py-2 shadow-sm fw-semibold d-inline-flex align-items-center gap-2"
+            onClick={() => setCantidadVisible((prev) => prev + 5)}
+          >
+            <FaChevronDown />
+            Ver más movimientos
+          </button>
+        </div>
+      )}
     </div>
   );
 }
