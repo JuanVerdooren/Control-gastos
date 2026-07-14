@@ -7,6 +7,8 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
+
+import Swal from "sweetalert2";
 function Login({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +27,22 @@ function Login({ onLogin }) {
       localStorage.setItem("token", data.token);
 
       localStorage.setItem("usuario", JSON.stringify(data.usuario));
+
+      await Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Inicio de sesión correctamente",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+
+      onLogin();
 
       onLogin();
     } catch (error) {

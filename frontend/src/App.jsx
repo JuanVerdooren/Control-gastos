@@ -19,17 +19,21 @@ function App() {
 
     if (!resultado.isConfirmed) return;
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuario");
-
-    setLogueado(false);
-
     Swal.fire({
+      toast: true,
+      position: "top-end",
       icon: "success",
-      title: "Sesión cerrada",
-      timer: 1500,
+      title: "Sesión cerrada correctamente",
       showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
     });
+
+    setTimeout(() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("usuario");
+      setLogueado(false);
+    }, 1500);
   };
 
   if (!logueado) {
