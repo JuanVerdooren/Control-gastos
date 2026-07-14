@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "./services/api";
 import Resumen from "./components/Resumen";
 import FormularioMovimiento from "./components/FormularioMovimiento";
 import TablaMovimientos from "./components/TablaMovimientos";
 import Swal from "sweetalert2";
 import Login from "./Login";
-import { FiLogOut, FiUser } from "react-icons/fi";
-
+import {
+  FiLogOut,
+  FiUser,
+  FiChevronLeft,
+  FiChevronRight,
+} from "react-icons/fi";
 function Dashboard({ cerrarSesion }) {
   const [movimientos, setMovimientos] = useState([]);
   const [movimientoEditar, setMovimientoEditar] = useState(null);
   const [mesSeleccionado, setMesSeleccionado] = useState(
     new Date().toISOString().slice(0, 7),
   );
+  const monthPickerRef = useRef(null);
 
   useEffect(() => {
     cargarMovimientos();
@@ -86,6 +91,29 @@ function Dashboard({ cerrarSesion }) {
     setMovimientoEditar(movimiento);
   };
 
+  const cambiarMes = (direccion) => {
+    const [anio, mes] = mesSeleccionado.split("-").map(Number);
+
+    const fecha = new Date(anio, mes - 1);
+
+    fecha.setMonth(fecha.getMonth() + direccion);
+
+    const nuevoMes = `${fecha.getFullYear()}-${String(
+      fecha.getMonth() + 1,
+    ).padStart(2, "0")}`;
+
+    setMesSeleccionado(nuevoMes);
+  };
+
+  const [anio, mes] = mesSeleccionado.split("-").map(Number);
+
+  const fechaActual = new Date(anio, mes - 1, 1);
+
+  const mesMostrar = fechaActual.toLocaleDateString("es-CO", {
+    month: "short",
+    year: "numeric",
+  });
+
   return (
     <div className="container-fluid container-lg mt-3 px-3">
       {" "}
@@ -124,13 +152,46 @@ function Dashboard({ cerrarSesion }) {
               </small>
             </div>
           </div>
-          <div className="w-100 w-md-auto" style={{ maxWidth: "220px" }}>
+          <div className="d-flex align-items-center justify-content-center">
+            <button
+              type="button"
+              className="btn border-0 bg-transparent p-0"
+              onClick={() => cambiarMes(-1)}
+              title="Mes anterior"
+            >
+              <FiChevronLeft size={28} className="fw-bold text-dark" />
+            </button>
+            <div
+              className="fw-bold text-dark text-center"
+              style={{
+                width: "110px",
+                cursor: "pointer",
+                fontSize: "1rem",
+                userSelect: "none",
+              }}
+              onClick={() => monthPickerRef.current?.showPicker()}
+            >
+              {mesMostrar}
+            </div>
             <input
+              ref={monthPickerRef}
               type="month"
-              className="form-control border-success fw-semibold text-center"
               value={mesSeleccionado}
               onChange={(e) => setMesSeleccionado(e.target.value)}
+              style={{
+                position: "absolute",
+                opacity: 0,
+                pointerEvents: "none",
+              }}
             />
+            <button
+              type="button"
+              className="btn border-0 bg-transparent p-0"
+              onClick={() => cambiarMes(1)}
+              title="Mes siguiente"
+            >
+              <FiChevronRight size={28} className="fw-bold text-dark" />
+            </button>
           </div>
         </div>
       </div>
