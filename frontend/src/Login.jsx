@@ -93,24 +93,27 @@ function Login({ onLogin }) {
                     onChange={(e) => setPassword(e.target.value)}
                   />
 
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="btn border-0 position-absolute"
-                    style={{
-                      right: "10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      background: "transparent",
-                      boxShadow: "none",
-                    }}
-                  >
-                    {showPassword ? (
-                      <FaEyeSlash className="text-secondary" />
-                    ) : (
-                      <FaEye className="text-secondary" />
-                    )}
-                  </button>
+                  {password && (
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="btn border-0 position-absolute"
+                      style={{
+                        right: "10px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        background: "transparent",
+                        boxShadow: "none",
+                        padding: 0,
+                      }}
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash className="text-secondary mb-1" size={18} />
+                      ) : (
+                        <FaEye className="text-secondary mb-1" size={18} />
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
 
