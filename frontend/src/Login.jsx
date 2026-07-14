@@ -62,7 +62,8 @@ function Login({ onLogin }) {
               <img
                 src="/cb36ee16-a4e4-4336-b898-8e387c57db25.png"
                 alt="FinControl"
-                width="80"
+                width="100"
+                height="100"
                 className="mb-3"
               />
 
