@@ -126,21 +126,21 @@ function Dashboard({ cerrarSesion }) {
           {" "}
           <div className="position-absolute top-0 start-0 end-0 m-3 d-flex justify-content-between align-items-center">
             <div
-              className="d-flex align-items-center gap-2 text-black fw-semibold"
+              className="d-flex align-items-center gap-2 fw-semibold bg-light border rounded-3 px-3 py-2 shadow-sm"
               style={{ cursor: "pointer" }}
               onClick={() => window.location.reload()}
             >
-              <FiUser size={20} />
-              Hola, {usuario?.nombre}
+              <FiUser size={20} className="text-secondary" />
+              <span className="text-dark">Hola, {usuario?.nombre}</span>
             </div>
 
             <button
-              className="btn d-flex align-items-center gap-2 text-danger"
+              className="btn d-flex align-items-center gap-2 text-danger bg-light border rounded-3 px-3 py-2 shadow-sm"
               onClick={cerrarSesion}
               title="Cerrar sesión"
             >
               <FiLogOut size={20} />
-              Sign Out
+              <span>Sign Out</span>
             </button>
           </div>
           <div className="d-flex flex-column flex-sm-row align-items-center text-center text-md-start">
