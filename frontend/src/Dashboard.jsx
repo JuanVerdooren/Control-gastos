@@ -125,7 +125,11 @@ function Dashboard({ cerrarSesion }) {
         <div className="card-body position-relative pt-5 pt-md-5 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
           {" "}
           <div className="position-absolute top-0 start-0 end-0 m-3 d-flex justify-content-between align-items-center">
-            <div className="d-flex align-items-center gap-2 text-black fw-semibold">
+            <div
+              className="d-flex align-items-center gap-2 text-black fw-semibold"
+              style={{ cursor: "pointer" }}
+              onClick={() => window.location.reload()}
+            >
               <FiUser size={20} />
               Hola, {usuario?.nombre}
             </div>
