@@ -11,12 +11,21 @@ import {
   FiChevronLeft,
   FiChevronRight,
 } from "react-icons/fi";
+
 function Dashboard({ cerrarSesion }) {
+  const obtenerMesActual = () => {
+    const fecha = new Date();
+
+    return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(
+      2,
+      "0",
+    )}`;
+  };
+
+  const [mesSeleccionado, setMesSeleccionado] = useState(obtenerMesActual());
   const [movimientos, setMovimientos] = useState([]);
   const [movimientoEditar, setMovimientoEditar] = useState(null);
-  const [mesSeleccionado, setMesSeleccionado] = useState(
-    new Date().toISOString().slice(0, 7),
-  );
+
   const monthPickerRef = useRef(null);
 
   useEffect(() => {
@@ -35,12 +44,7 @@ function Dashboard({ cerrarSesion }) {
   };
 
   const movimientosFiltrados = movimientos.filter((movimiento) => {
-    const fecha = new Date(movimiento.fecha);
-
-    const mes = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(
-      2,
-      "0",
-    )}`;
+    const mes = movimiento.fecha.substring(0, 7);
 
     return mes === mesSeleccionado;
   });
