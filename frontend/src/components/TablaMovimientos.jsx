@@ -57,9 +57,15 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
         ) : (
           <div className="d-flex flex-column gap-3">
             {movimientosVisibles.map((movimiento) => {
-              const [anio, mes, dia] = movimiento.fecha.slice(0, 10).split("-");
+              const fechaObj = new Date(
+                `${movimiento.fecha.slice(0, 10)}T00:00:00`,
+              );
 
-              const fecha = `${dia}/${mes}/${anio.slice(2)}`;
+              const dias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+              const diaSemana = dias[fechaObj.getDay()];
+
+              const fecha = `${diaSemana}, ${String(fechaObj.getDate()).padStart(2, "0")}/${String(fechaObj.getMonth() + 1).padStart(2, "0")}/${String(fechaObj.getFullYear()).slice(2)}`;
 
               return (
                 <div
@@ -105,15 +111,15 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
 
                     <div className="d-flex justify-content-end gap-2">
                       <button
-                        className="btn btn-success btn-sm rounded-circle"
+                        className="btn btn-light btn-sm rounded-circle shadow-sm"
                         title="Editar"
                         onClick={() => onEditar(movimiento)}
                       >
-                        <FaEdit />
+                        <FaEdit className="text-dark" />
                       </button>
 
                       <button
-                        className="btn btn-danger btn-sm rounded-circle"
+                        className="btn btn-light btn-sm rounded-circle shadow-sm"
                         title="Eliminar"
                         onClick={() => onEliminar(movimiento._id)}
                       >

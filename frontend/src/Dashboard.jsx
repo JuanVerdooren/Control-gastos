@@ -203,6 +203,7 @@ function Dashboard({ cerrarSesion }) {
         setMovimientoEditar={setMovimientoEditar}
         movimientos={movimientosFiltrados}
         mesSeleccionado={mesSeleccionado}
+        saldoTotal={saldoTotal}
       />
       <TablaMovimientos
         movimientos={movimientosFiltrados}

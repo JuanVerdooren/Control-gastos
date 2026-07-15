@@ -19,7 +19,12 @@ const cargarLogo = () => {
   });
 };
 
-const generarExtracto = async (movimientos, mes) => {
+const generarExtracto = async (
+  movimientos,
+  mes,
+  saldoTotal,
+  todosMovimientos,
+) => {
   const doc = new jsPDF();
 
   const logo = await cargarLogo();
@@ -104,7 +109,7 @@ const generarExtracto = async (movimientos, mes) => {
   );
 
   doc.text(
-    `Balance: ${balance.toLocaleString("es-CO", {
+    `Balance mes: ${balance.toLocaleString("es-CO", {
       style: "currency",
       currency: "COP",
       minimumFractionDigits: 0,
@@ -115,11 +120,38 @@ const generarExtracto = async (movimientos, mes) => {
 
   doc.text(`Movimientos registrados: ${movimientos.length}`, 20, 104);
 
+  doc.text(
+    `Saldo total: ${saldoTotal.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    })}`,
+    20,
+    112,
+  );
+
   // ===========================
   // TABLA
   // ===========================
 
-  const filas = movimientos.map((m) => {
+  // ===========================
+  // TABLA
+  // ===========================
+
+  // Ordenar por fecha de creación (más antiguo -> más reciente)
+  const movimientosOrdenados = [...movimientos].sort(
+    (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+  );
+
+  // Comenzar desde el saldo total actual
+  let saldo = saldoTotal;
+
+  // Construir filas del más reciente al más antiguo
+  const filas = [];
+
+  for (let i = movimientosOrdenados.length - 1; i >= 0; i--) {
+    const m = movimientosOrdenados[i];
+
     const fecha = m.fecha.substring(0, 10).split("-").reverse().join("/");
 
     const valor =
@@ -130,18 +162,32 @@ const generarExtracto = async (movimientos, mes) => {
         minimumFractionDigits: 0,
       });
 
-    return [
+    const saldoTexto = saldo.toLocaleString("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    });
+
+    filas.push([
       fecha,
       m.descripcion,
       m.tipo === "ingreso" ? "Ingreso" : "Egreso",
       valor,
-    ];
-  });
+      saldoTexto,
+    ]);
+
+    // Deshacer el movimiento para obtener el saldo anterior
+    if (m.tipo === "ingreso") {
+      saldo -= m.valor;
+    } else {
+      saldo += m.valor;
+    }
+  }
 
   autoTable(doc, {
-    startY: 115,
+    startY: 123,
 
-    head: [["Fecha", "Descripción", "Tipo", "Valor"]],
+    head: [["Fecha", "Descripción", "Tipo", "Valor", "Saldo"]],
 
     body: filas,
 
@@ -159,9 +205,10 @@ const generarExtracto = async (movimientos, mes) => {
 
     columnStyles: {
       0: { halign: "center", cellWidth: 28 },
-      1: { cellWidth: 85 },
-      2: { halign: "center", cellWidth: 30 },
-      3: { halign: "right", cellWidth: 40 },
+      1: { cellWidth: 68 },
+      2: { halign: "center", cellWidth: 25 },
+      3: { halign: "right", cellWidth: 32 },
+      4: { halign: "right", cellWidth: 37 },
     },
   });
 
