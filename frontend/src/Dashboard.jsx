@@ -27,6 +27,7 @@ function Dashboard({ cerrarSesion }) {
   const [movimientoEditar, setMovimientoEditar] = useState(null);
 
   const monthPickerRef = useRef(null);
+  const formularioRef = useRef(null);
 
   useEffect(() => {
     cargarMovimientos();
@@ -93,6 +94,13 @@ function Dashboard({ cerrarSesion }) {
 
   const editarMovimiento = (movimiento) => {
     setMovimientoEditar(movimiento);
+
+    setTimeout(() => {
+      formularioRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
   };
 
   const cambiarMes = (direccion) => {
@@ -205,14 +213,16 @@ function Dashboard({ cerrarSesion }) {
       </div>
       {/* Tarjetas con ingresos, egresos y balance */}
       <Resumen movimientos={movimientosFiltrados} saldoTotal={saldoTotal} />
-      <FormularioMovimiento
-        onGuardar={cargarMovimientos}
-        movimientoEditar={movimientoEditar}
-        setMovimientoEditar={setMovimientoEditar}
-        movimientos={movimientosFiltrados}
-        mesSeleccionado={mesSeleccionado}
-        saldoTotal={saldoTotal}
-      />
+      <div ref={formularioRef}>
+        <FormularioMovimiento
+          onGuardar={cargarMovimientos}
+          movimientoEditar={movimientoEditar}
+          setMovimientoEditar={setMovimientoEditar}
+          movimientos={movimientosFiltrados}
+          mesSeleccionado={mesSeleccionado}
+          saldoTotal={saldoTotal}
+        />
+      </div>
       <TablaMovimientos
         movimientos={movimientosFiltrados}
         onEliminar={eliminarMovimiento}
