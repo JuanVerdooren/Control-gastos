@@ -212,17 +212,17 @@ function Dashboard({ cerrarSesion }) {
         </div>
       </div>
       {/* Tarjetas con ingresos, egresos y balance */}
-      <Resumen movimientos={movimientosFiltrados} saldoTotal={saldoTotal} />
       <div ref={formularioRef}>
-        <FormularioMovimiento
-          onGuardar={cargarMovimientos}
-          movimientoEditar={movimientoEditar}
-          setMovimientoEditar={setMovimientoEditar}
-          movimientos={movimientosFiltrados}
-          mesSeleccionado={mesSeleccionado}
-          saldoTotal={saldoTotal}
-        />
+        <Resumen movimientos={movimientosFiltrados} saldoTotal={saldoTotal} />
       </div>
+      <FormularioMovimiento
+        onGuardar={cargarMovimientos}
+        movimientoEditar={movimientoEditar}
+        setMovimientoEditar={setMovimientoEditar}
+        movimientos={movimientosFiltrados}
+        mesSeleccionado={mesSeleccionado}
+        saldoTotal={saldoTotal}
+      />
       <TablaMovimientos
         movimientos={movimientosFiltrados}
         onEliminar={eliminarMovimiento}
