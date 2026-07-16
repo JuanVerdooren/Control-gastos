@@ -9,6 +9,8 @@ import {
   FaTag,
   FaSave,
   FaAlignLeft,
+  FaPlusCircle,
+  FaEdit,
 } from "react-icons/fa";
 import generarExtracto from "../reportes/generarExtracto";
 
@@ -158,7 +160,12 @@ function FormularioMovimiento({
   return (
     <div className="card border-0 shadow rounded-3 mb-4">
       <div className="card-header bg-success text-white rounded-top-4 py-3 px-3 d-flex justify-content-between align-items-center">
-        <strong>
+        <strong className="d-flex align-items-center">
+          {movimientoEditar ? (
+            <FaEdit className="me-1" />
+          ) : (
+            <FaPlusCircle className="me-1" />
+          )}
           {movimientoEditar ? "Editar Movimiento" : "Nuevo Movimiento"}
         </strong>
 

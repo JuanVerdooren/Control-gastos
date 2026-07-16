@@ -6,6 +6,7 @@ import {
   FaArrowCircleDown,
   FaSyncAlt,
   FaChevronDown,
+  FaCoins,
 } from "react-icons/fa";
 import { useState } from "react";
 
@@ -24,16 +25,37 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
   };
 
   const movimientosVisibles = movimientos.slice(0, cantidadVisible);
+
+  const hoy = new Date();
+
+  const hoyTexto = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, "0")}-${String(hoy.getDate()).padStart(2, "0")}`;
+
+  const gastosHoy = movimientos.reduce((total, movimiento) => {
+    if (movimiento.fecha.substring(0, 10) !== hoyTexto) return total;
+
+    if (movimiento.tipo !== "egreso") return total;
+
+    return total + movimiento.valor;
+  }, 0);
+
   return (
     <div className="card border-0 shadow rounded-4 mb-4">
-      <div className="card-header bg-success text-white rounded-top-4 py-2 d-flex justify-content-center align-items-center">
+      <div className="card-header bg-success text-white rounded-top-4 py-2 d-flex align-items-center">
         <h5 className="mb-0 fw-bold text-white">
           <FaListAlt className="me-2 mb-1" />
           Movimientos
         </h5>
 
+        <div className="mx-auto d-flex align-items-center fw-bold fs-6">
+          <FaCoins className="me-2" />-{" "}
+          {gastosHoy.toLocaleString("es-CO", {
+            style: "currency",
+            currency: "COP",
+            minimumFractionDigits: 0,
+          })}
+        </div>
         <button
-          className="btn btn-light btn-sm rounded-circle ms-auto"
+          className="btn btn-light btn-sm rounded-circle"
           title="Actualizar movimientos"
           onClick={actualizarMovimientos}
           disabled={actualizando}
