@@ -34,6 +34,7 @@ function FormularioMovimiento({
 }) {
   const [formulario, setFormulario] = useState({
     tipo: "ingreso",
+    categoria: "Salario",
     descripcion: "",
     valor: "",
     fecha: obtenerFechaActual(),
@@ -43,6 +44,7 @@ function FormularioMovimiento({
     if (movimientoEditar) {
       setFormulario({
         tipo: movimientoEditar.tipo,
+        categoria: movimientoEditar.categoria,
         descripcion: movimientoEditar.descripcion,
         valor: movimientoEditar.valor,
         fecha: movimientoEditar.fecha.substring(0, 10),
@@ -51,15 +53,28 @@ function FormularioMovimiento({
   }, [movimientoEditar]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "tipo") {
+      setFormulario({
+        ...formulario,
+        tipo: value,
+        categoria: categorias[value][0],
+      });
+
+      return;
+    }
+
     setFormulario({
       ...formulario,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
   const limpiarFormulario = () => {
     setFormulario({
       tipo: "ingreso",
+      categoria: "Salario",
       descripcion: "",
       valor: "",
       fecha: obtenerFechaActual(),
@@ -98,6 +113,7 @@ function FormularioMovimiento({
           valor: Number(formulario.valor),
         });
       } else {
+        console.log(formulario);
         await api.post("/movimientos", {
           ...formulario,
           valor: Number(formulario.valor),
@@ -157,6 +173,21 @@ function FormularioMovimiento({
     });
   };
 
+  const categorias = {
+    ingreso: [
+      "Salario",
+      "Transferencia",
+      "Otros",
+    ],
+    egreso: [
+      "Mercado",
+      "Transporte",
+      "Arriendo",
+      "Prestamo",
+      "Otros",
+    ],
+  };
+
   return (
     <div className="card border-0 shadow rounded-3 mb-4">
       <div className="card-header bg-success text-white rounded-top-4 py-3 px-3 d-flex justify-content-between align-items-center">
@@ -195,6 +226,23 @@ function FormularioMovimiento({
               >
                 <option value="ingreso">Ingreso</option>
                 <option value="egreso">Egreso</option>
+              </select>
+            </div>
+
+            <div className="col-12 col-md-3">
+              <label className="form-label fw-semibold">Categoría</label>
+
+              <select
+                className="form-select rounded-3 shadow-sm"
+                name="categoria"
+                value={formulario.categoria}
+                onChange={handleChange}
+              >
+                {categorias[formulario.tipo].map((categoria) => (
+                  <option key={categoria} value={categoria}>
+                    {categoria}
+                  </option>
+                ))}
               </select>
             </div>
 

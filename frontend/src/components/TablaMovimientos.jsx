@@ -7,6 +7,13 @@ import {
   FaSyncAlt,
   FaChevronDown,
   FaCoins,
+  FaShoppingCart,
+  FaBus,
+  FaHome,
+  FaMoneyCheckAlt,
+  FaExchangeAlt,
+  FaEllipsisH,
+  FaHandHoldingUsd,
 } from "react-icons/fa";
 import { useState } from "react";
 
@@ -37,6 +44,16 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
 
     return total + movimiento.valor;
   }, 0);
+
+  const iconosCategoria = {
+    Salario: <FaMoneyCheckAlt />,
+    Transferencia: <FaExchangeAlt />,
+    Mercado: <FaShoppingCart />,
+    Transporte: <FaBus />,
+    Arriendo: <FaHome />,
+    Prestamo: <FaHandHoldingUsd />,
+    Otros: <FaEllipsisH />,
+  };
 
   return (
     <div className="card border-0 shadow rounded-4 mb-4">
@@ -131,22 +148,37 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
 
                     <hr className="my-3" />
 
-                    <div className="d-flex justify-content-end gap-2">
-                      <button
-                        className="btn btn-light btn-sm rounded-circle shadow-sm"
-                        title="Editar"
-                        onClick={() => onEditar(movimiento)}
-                      >
-                        <FaEdit className="text-dark" />
-                      </button>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex align-items-center text-muted fw-semibold">
+                        <span className="me-1 mb-1">
+                          {iconosCategoria[movimiento.categoria] || (
+                            <FaEllipsisH />
+                          )}
+                        </span>
 
-                      <button
-                        className="btn btn-light btn-sm rounded-circle shadow-sm"
-                        title="Eliminar"
-                        onClick={() => onEliminar(movimiento._id)}
-                      >
-                        <FaTrash />
-                      </button>
+                        {movimiento.categoria
+                          ? movimiento.categoria.charAt(0).toUpperCase() +
+                            movimiento.categoria.slice(1)
+                          : "Otros"}
+                      </div>
+
+                      <div className="ms-auto d-flex gap-2">
+                        <button
+                          className="btn btn-light btn-sm rounded-circle shadow-sm"
+                          title="Editar"
+                          onClick={() => onEditar(movimiento)}
+                        >
+                          <FaEdit className="text-dark" />
+                        </button>
+
+                        <button
+                          className="btn btn-light btn-sm rounded-circle shadow-sm"
+                          title="Eliminar"
+                          onClick={() => onEliminar(movimiento._id)}
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

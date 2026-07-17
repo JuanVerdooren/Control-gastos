@@ -14,6 +14,11 @@ const movimientoSchema = new mongoose.Schema(
       required: true,
     },
 
+    categoria: {
+      type: String,
+      required: true,
+    },
+
     descripcion: {
       type: String,
       required: true,
@@ -33,7 +38,7 @@ const movimientoSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.model("Movimiento", movimientoSchema);

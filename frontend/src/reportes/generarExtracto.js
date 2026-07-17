@@ -130,6 +130,39 @@ const generarExtracto = async (
     112,
   );
 
+  const gastosPorCategoria = movimientos
+    .filter((m) => m.tipo === "egreso")
+    .reduce((acc, movimiento) => {
+      const categoria = movimiento.categoria || "Otros";
+
+      acc[categoria] = (acc[categoria] || 0) + movimiento.valor;
+
+      return acc;
+    }, {});
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(13);
+  doc.text("Gastos", 120, 70);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(11);
+
+  let yCategoria = 80;
+
+  Object.entries(gastosPorCategoria).forEach(([categoria, valor]) => {
+    doc.text(
+      `${categoria}: ${valor.toLocaleString("es-CO", {
+        style: "currency",
+        currency: "COP",
+        minimumFractionDigits: 0,
+      })}`,
+      125,
+      yCategoria,
+    );
+
+    yCategoria += 8;
+  });
+
   // ===========================
   // TABLA
   // ===========================
