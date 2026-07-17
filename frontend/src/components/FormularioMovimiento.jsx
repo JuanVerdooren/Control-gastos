@@ -174,18 +174,8 @@ function FormularioMovimiento({
   };
 
   const categorias = {
-    ingreso: [
-      "Salario",
-      "Transferencia",
-      "Otros",
-    ],
-    egreso: [
-      "Mercado",
-      "Transporte",
-      "Arriendo",
-      "Prestamo",
-      "Otros",
-    ],
+    ingreso: ["Salario", "Transferencia", "Otros"],
+    egreso: ["Mercado", "Transporte", "Arriendo", "Prestamo", "Otros"],
   };
 
   return (
@@ -212,7 +202,7 @@ function FormularioMovimiento({
       <div className="card-body p-4">
         <form onSubmit={handleSubmit}>
           <div className="row g-3">
-            <div className="col-12 col-md-2">
+            <div className="col-12 col-lg-2">
               <label className="form-label fw-semibold">
                 <FaTag className="me-2 text-success" />
                 Tipo
@@ -229,7 +219,7 @@ function FormularioMovimiento({
               </select>
             </div>
 
-            <div className="col-12 col-md-3">
+            <div className="col-12 col-lg-3">
               <label className="form-label fw-semibold">Categoría</label>
 
               <select
@@ -246,7 +236,7 @@ function FormularioMovimiento({
               </select>
             </div>
 
-            <div className="col-12 col-md-4">
+            <div className="col-12 col-lg-7">
               <label className="form-label fw-semibold">
                 <FaAlignLeft className="me-2 text-success" />
                 Descripción
@@ -261,7 +251,7 @@ function FormularioMovimiento({
               />
             </div>
 
-            <div className="col-12 col-md-2">
+            <div className="col-12 col-lg-4">
               <label className="form-label fw-semibold">
                 <FaMoneyBillWave className="me-2 text-success" />
                 Valor
@@ -285,7 +275,7 @@ function FormularioMovimiento({
               />
             </div>
 
-            <div className="col-12 col-md-2">
+            <div className="col-12 col-lg-3">
               <label className="form-label fw-semibold">
                 <FaCalendarAlt className="me-2 text-success" />
                 Fecha
@@ -300,7 +290,7 @@ function FormularioMovimiento({
               />
             </div>
 
-            <div className="col-12 col-md-2 d-flex align-items-end">
+            <div className="col-12 col-lg-5 d-flex align-items-end">
               <button
                 type="submit"
                 className="btn btn-success w-100 rounded-3 shadow py-2"
