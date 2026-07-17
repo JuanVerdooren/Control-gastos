@@ -120,6 +120,8 @@ const generarExtracto = async (
 
   doc.text(`Movimientos registrados: ${movimientos.length}`, 20, 104);
 
+  doc.setFont("helvetica", "bold");
+
   doc.text(
     `Saldo total: ${saldoTotal.toLocaleString("es-CO", {
       style: "currency",
@@ -129,6 +131,8 @@ const generarExtracto = async (
     20,
     112,
   );
+
+  doc.setFont("helvetica", "normal");
 
   const gastosPorCategoria = movimientos
     .filter((m) => m.tipo === "egreso")

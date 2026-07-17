@@ -17,7 +17,13 @@ import {
 } from "react-icons/fa";
 import { useState } from "react";
 
-function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
+function TablaMovimientos({
+  movimientos,
+  todosMovimientos,
+  onEliminar,
+  onEditar,
+  onActualizar,
+}) {
   const [actualizando, setActualizando] = useState(false);
   const [cantidadVisible, setCantidadVisible] = useState(5);
 
@@ -37,7 +43,7 @@ function TablaMovimientos({ movimientos, onEliminar, onEditar, onActualizar }) {
 
   const hoyTexto = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, "0")}-${String(hoy.getDate()).padStart(2, "0")}`;
 
-  const gastosHoy = movimientos.reduce((total, movimiento) => {
+  const gastosHoy = todosMovimientos.reduce((total, movimiento) => {
     if (movimiento.fecha.substring(0, 10) !== hoyTexto) return total;
 
     if (movimiento.tipo !== "egreso") return total;

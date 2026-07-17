@@ -225,6 +225,7 @@ function Dashboard({ cerrarSesion }) {
       />
       <TablaMovimientos
         movimientos={movimientosFiltrados}
+        todosMovimientos={movimientos}
         onEliminar={eliminarMovimiento}
         onEditar={editarMovimiento}
         onActualizar={cargarMovimientos}
