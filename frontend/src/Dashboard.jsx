@@ -11,6 +11,8 @@ import {
   FiChevronLeft,
   FiChevronRight,
 } from "react-icons/fi";
+import ConfirmModal from "./components/ConfirmModal";
+import { FaTrash } from "react-icons/fa";
 
 function Dashboard({ cerrarSesion }) {
   const obtenerMesActual = () => {
@@ -25,6 +27,8 @@ function Dashboard({ cerrarSesion }) {
   const [mesSeleccionado, setMesSeleccionado] = useState(obtenerMesActual());
   const [movimientos, setMovimientos] = useState([]);
   const [movimientoEditar, setMovimientoEditar] = useState(null);
+  const [mostrarEliminar, setMostrarEliminar] = useState(false);
+  const [movimientoEliminar, setMovimientoEliminar] = useState(null);
 
   const monthPickerRef = useRef(null);
   const formularioRef = useRef(null);
@@ -56,40 +60,9 @@ function Dashboard({ cerrarSesion }) {
       : saldo - movimiento.valor;
   }, 0);
 
-  const eliminarMovimiento = async (id) => {
-    const confirmar = await Swal.fire({
-      title: "¿Eliminar movimiento?",
-      text: "Esta acción no se puede deshacer",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, eliminar",
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: "#dc3545",
-    });
-
-    if (!confirmar.isConfirmed) return;
-
-    try {
-      await api.delete(`/movimientos/${id}`);
-
-      cargarMovimientos();
-
-      Swal.fire({
-        icon: "success",
-        title: "Movimiento eliminado",
-        text: "El movimiento fue eliminado correctamente",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      console.error(error);
-
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo eliminar el movimiento",
-      });
-    }
+  const eliminarMovimiento = (id) => {
+    setMovimientoEliminar(id);
+    setMostrarEliminar(true);
   };
 
   const editarMovimiento = (movimiento) => {
@@ -125,6 +98,33 @@ function Dashboard({ cerrarSesion }) {
     month: "short",
     year: "numeric",
   });
+
+  const confirmarEliminar = async () => {
+    try {
+      await api.delete(`/movimientos/${movimientoEliminar}`);
+
+      setMostrarEliminar(false);
+      setMovimientoEliminar(null);
+
+      cargarMovimientos();
+
+      Swal.fire({
+        icon: "success",
+        title: "Movimiento eliminado",
+        text: "El movimiento fue eliminado correctamente",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error(error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo eliminar el movimiento",
+      });
+    }
+  };
 
   return (
     <div className="container-fluid container-lg mt-3 px-3">
@@ -231,6 +231,20 @@ function Dashboard({ cerrarSesion }) {
         onEliminar={eliminarMovimiento}
         onEditar={editarMovimiento}
         onActualizar={cargarMovimientos}
+      />
+      <ConfirmModal
+        show={mostrarEliminar}
+        titulo="Eliminar movimiento"
+        mensaje="Esta acción no se puede deshacer."
+        icono={<FaTrash size={55} className="text-danger" />}
+        textoConfirmar="Eliminar"
+        textoCancelar="Cancelar"
+        colorConfirmar="danger"
+        onCancelar={() => {
+          setMostrarEliminar(false);
+          setMovimientoEliminar(null);
+        }}
+        onConfirmar={confirmarEliminar}
       />
     </div>
   );

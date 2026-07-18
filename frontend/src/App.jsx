@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import Swal from "sweetalert2";
+import ConfirmModal from "./components/ConfirmModal";
+import { FaSignOutAlt } from "react-icons/fa";
 
 function App() {
   const [logueado, setLogueado] = useState(!!localStorage.getItem("token"));
+  const [mostrarCerrarSesion, setMostrarCerrarSesion] = useState(false);
 
   useEffect(() => {
     if (!logueado) return;
@@ -34,7 +37,7 @@ function App() {
 
       timeout = setTimeout(
         cerrarPorInactividad,
-        15 * 60 * 10000 // Cambia a 10000 para probar (10 segundos)
+        15 * 60 * 10000, // Cambia a 10000 para probar (10 segundos)
       );
     };
 
@@ -48,7 +51,7 @@ function App() {
     ];
 
     eventos.forEach((evento) =>
-      window.addEventListener(evento, reiniciarTemporizador)
+      window.addEventListener(evento, reiniciarTemporizador),
     );
 
     reiniciarTemporizador();
@@ -57,23 +60,17 @@ function App() {
       clearTimeout(timeout);
 
       eventos.forEach((evento) =>
-        window.removeEventListener(evento, reiniciarTemporizador)
+        window.removeEventListener(evento, reiniciarTemporizador),
       );
     };
   }, [logueado]);
 
-  const cerrarSesion = async () => {
-    const resultado = await Swal.fire({
-      title: "¿Cerrar sesión?",
-      text: "Tu sesión actual se cerrará",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, salir",
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: "#dc3545",
-    });
+  const cerrarSesion = () => {
+    setMostrarCerrarSesion(true);
+  };
 
-    if (!resultado.isConfirmed) return;
+  const confirmarCerrarSesion = () => {
+    setMostrarCerrarSesion(false);
 
     Swal.fire({
       toast: true,
@@ -96,7 +93,23 @@ function App() {
     return <Login onLogin={() => setLogueado(true)} />;
   }
 
-  return <Dashboard cerrarSesion={cerrarSesion} />;
+  return (
+    <>
+      <Dashboard cerrarSesion={cerrarSesion} />
+
+      <ConfirmModal
+        show={mostrarCerrarSesion}
+        titulo="Cerrar sesión"
+        mensaje="Tu sesión actual se cerrará."
+        icono={<FaSignOutAlt size={55} className="text-black" />}
+        textoConfirmar="Cerrar sesión"
+        textoCancelar="Cancelar"
+        colorConfirmar="danger"
+        onCancelar={() => setMostrarCerrarSesion(false)}
+        onConfirmar={confirmarCerrarSesion}
+      />
+    </>
+  );
 }
 
-export default App; 
+export default App;

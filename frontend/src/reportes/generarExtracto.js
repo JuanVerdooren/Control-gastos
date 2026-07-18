@@ -55,7 +55,7 @@ const generarExtracto = async (
   doc.setFontSize(11);
 
   // Usuario
-  doc.text(`USERNAME: ${usuario}`, 195, 18, {
+  doc.text(`Username: ${usuario}`, 195, 18, {
     align: "right",
   });
 

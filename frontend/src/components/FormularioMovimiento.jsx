@@ -13,6 +13,7 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import generarExtracto from "../reportes/generarExtracto";
+import ConfirmModal from "../components/ConfirmModal";
 
 const obtenerFechaActual = () => {
   const fecha = new Date();
@@ -41,6 +42,8 @@ function FormularioMovimiento({
     valor: "",
     fecha: obtenerFechaActual(),
   });
+
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
   useEffect(() => {
     if (movimientoEditar) {
@@ -115,7 +118,6 @@ function FormularioMovimiento({
           valor: Number(formulario.valor),
         });
       } else {
-        console.log(formulario);
         await api.post("/movimientos", {
           ...formulario,
           valor: Number(formulario.valor),
@@ -153,26 +155,7 @@ function FormularioMovimiento({
   };
 
   const confirmarReporte = () => {
-    Swal.fire({
-      title: "Generar Extracto",
-      html: `
-      <p>Se generará el extracto financiero del mes:</p>
-      <h4 style="color:#198754; margin-top:10px;">
-        ${mesSeleccionado}
-      </h4>
-    `,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#198754",
-      cancelButtonColor: "#6c757d",
-      confirmButtonText: "Generar PDF",
-      cancelButtonText: "Cancelar",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        generarExtracto(movimientos, mesSeleccionado, saldoTotal, todosMovimientos, usuario.nombre);
-      }
-    });
+    setMostrarConfirmacion(true);
   };
 
   const categorias = {
@@ -181,130 +164,155 @@ function FormularioMovimiento({
   };
 
   return (
-    <div className="card border-0 shadow rounded-3 mb-4">
-      <div className="card-header bg-success text-white rounded-top-4 py-3 px-3 d-flex justify-content-between align-items-center">
-        <strong className="d-flex align-items-center">
-          {movimientoEditar ? (
-            <FaEdit className="me-1" />
-          ) : (
-            <FaPlusCircle className="me-1" />
-          )}
-          {movimientoEditar ? "Editar Movimiento" : "Nuevo Movimiento"}
-        </strong>
+    <>
+      <div className="card border-0 shadow rounded-3 mb-4">
+        <div className="card-header bg-success text-white rounded-top-4 py-3 px-3 d-flex justify-content-between align-items-center">
+          <strong className="d-flex align-items-center">
+            {movimientoEditar ? (
+              <FaEdit className="me-1" />
+            ) : (
+              <FaPlusCircle className="me-1" />
+            )}
+            {movimientoEditar ? "Editar Movimiento" : "Nuevo Movimiento"}
+          </strong>
 
-        <button
-          className="btn btn-light btn-sm rounded-pill px-3 shadow-sm"
-          onClick={confirmarReporte}
-        >
-          <FaFilePdf className="text-black me-2" />
-          PDF
-        </button>
+          <button
+            className="btn btn-light btn-sm rounded-pill px-3 shadow-sm"
+            onClick={confirmarReporte}
+          >
+            <FaFilePdf className="text-black me-2" />
+            PDF
+          </button>
+        </div>
+
+        <div className="card-body p-4">
+          <form onSubmit={handleSubmit}>
+            <div className="row g-3">
+              <div className="col-12 col-lg-2">
+                <label className="form-label fw-semibold">
+                  <FaTag className="me-2 text-success" />
+                  Tipo
+                </label>
+
+                <select
+                  className="form-select rounded-3 shadow-sm"
+                  name="tipo"
+                  value={formulario.tipo}
+                  onChange={handleChange}
+                >
+                  <option value="ingreso">Ingreso</option>
+                  <option value="egreso">Egreso</option>
+                </select>
+              </div>
+
+              <div className="col-12 col-lg-3">
+                <label className="form-label fw-semibold">Categoría</label>
+
+                <select
+                  className="form-select rounded-3 shadow-sm"
+                  name="categoria"
+                  value={formulario.categoria}
+                  onChange={handleChange}
+                >
+                  {categorias[formulario.tipo].map((categoria) => (
+                    <option key={categoria} value={categoria}>
+                      {categoria}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="col-12 col-lg-7">
+                <label className="form-label fw-semibold">
+                  <FaAlignLeft className="me-2 text-success" />
+                  Descripción
+                </label>
+
+                <input
+                  className="form-control rounded-3 shadow-sm"
+                  name="descripcion"
+                  placeholder="Ej. Pago de nómina, Mercado..."
+                  value={formulario.descripcion}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="col-12 col-lg-4">
+                <label className="form-label fw-semibold">
+                  <FaMoneyBillWave className="me-2 text-success" />
+                  Valor
+                </label>
+
+                <NumericFormat
+                  className="form-control rounded-3 shadow-sm"
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  prefix="$ "
+                  decimalScale={0}
+                  allowNegative={false}
+                  placeholder="$ 0"
+                  value={formulario.valor}
+                  onValueChange={(values) =>
+                    setFormulario({
+                      ...formulario,
+                      valor: values.floatValue || "",
+                    })
+                  }
+                />
+              </div>
+
+              <div className="col-12 col-lg-3">
+                <label className="form-label fw-semibold">
+                  <FaCalendarAlt className="me-2 text-success" />
+                  Fecha
+                </label>
+
+                <input
+                  type="date"
+                  className="form-control rounded-3 shadow-sm"
+                  name="fecha"
+                  value={formulario.fecha}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="col-12 col-lg-5 d-flex align-items-end">
+                <button
+                  type="submit"
+                  className="btn btn-success w-100 rounded-3 shadow py-2"
+                >
+                  <FaSave className="me-2" />
+                  {movimientoEditar ? "Actualizar" : "Guardar"}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <div className="card-body p-4">
-        <form onSubmit={handleSubmit}>
-          <div className="row g-3">
-            <div className="col-12 col-lg-2">
-              <label className="form-label fw-semibold">
-                <FaTag className="me-2 text-success" />
-                Tipo
-              </label>
+      <ConfirmModal
+        show={mostrarConfirmacion}
+        titulo="Generar Extracto"
+        mensaje="Se generará el extracto financiero del mes:"
+        icono={<FaFilePdf size={55} className="text-black" />}
+        textoConfirmar="Generar PDF"
+        textoCancelar="Cancelar"
+        onCancelar={() => setMostrarConfirmacion(false)}
+        onConfirmar={() => {
+          setMostrarConfirmacion(false);
 
-              <select
-                className="form-select rounded-3 shadow-sm"
-                name="tipo"
-                value={formulario.tipo}
-                onChange={handleChange}
-              >
-                <option value="ingreso">Ingreso</option>
-                <option value="egreso">Egreso</option>
-              </select>
-            </div>
-
-            <div className="col-12 col-lg-3">
-              <label className="form-label fw-semibold">Categoría</label>
-
-              <select
-                className="form-select rounded-3 shadow-sm"
-                name="categoria"
-                value={formulario.categoria}
-                onChange={handleChange}
-              >
-                {categorias[formulario.tipo].map((categoria) => (
-                  <option key={categoria} value={categoria}>
-                    {categoria}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="col-12 col-lg-7">
-              <label className="form-label fw-semibold">
-                <FaAlignLeft className="me-2 text-success" />
-                Descripción
-              </label>
-
-              <input
-                className="form-control rounded-3 shadow-sm"
-                name="descripcion"
-                placeholder="Ej. Pago de nómina, Mercado..."
-                value={formulario.descripcion}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="col-12 col-lg-4">
-              <label className="form-label fw-semibold">
-                <FaMoneyBillWave className="me-2 text-success" />
-                Valor
-              </label>
-
-              <NumericFormat
-                className="form-control rounded-3 shadow-sm"
-                thousandSeparator="."
-                decimalSeparator=","
-                prefix="$ "
-                decimalScale={0}
-                allowNegative={false}
-                placeholder="$ 0"
-                value={formulario.valor}
-                onValueChange={(values) =>
-                  setFormulario({
-                    ...formulario,
-                    valor: values.floatValue || "",
-                  })
-                }
-              />
-            </div>
-
-            <div className="col-12 col-lg-3">
-              <label className="form-label fw-semibold">
-                <FaCalendarAlt className="me-2 text-success" />
-                Fecha
-              </label>
-
-              <input
-                type="date"
-                className="form-control rounded-3 shadow-sm"
-                name="fecha"
-                value={formulario.fecha}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="col-12 col-lg-5 d-flex align-items-end">
-              <button
-                type="submit"
-                className="btn btn-success w-100 rounded-3 shadow py-2"
-              >
-                <FaSave className="me-2" />
-                {movimientoEditar ? "Actualizar" : "Guardar"}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+          generarExtracto(
+            movimientos,
+            mesSeleccionado,
+            saldoTotal,
+            todosMovimientos,
+            usuario.nombre,
+          );
+        }}
+      >
+        <h4 className="text-success fw-bold mt-3">{mesSeleccionado}</h4>
+      </ConfirmModal>
+    </>
   );
 }
 
