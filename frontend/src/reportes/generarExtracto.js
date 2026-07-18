@@ -83,7 +83,7 @@ const generarExtracto = async (
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(13);
-  doc.text("Resumen", 15, 70);
+  doc.text("Resumen", 20, 70);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(11);
@@ -153,73 +153,80 @@ const generarExtracto = async (
 
   let yCategoria = 80;
 
-  Object.entries(gastosPorCategoria).forEach(([categoria, valor]) => {
-    doc.text(
-      `${categoria}: ${valor.toLocaleString("es-CO", {
-        style: "currency",
-        currency: "COP",
-        minimumFractionDigits: 0,
-      })}`,
-      125,
-      yCategoria,
-    );
+  const categorias = Object.entries(gastosPorCategoria);
 
-    yCategoria += 8;
-  });
+  if (categorias.length === 0) {
+    doc.setTextColor(120);
 
-  // ===========================
-  // TABLA
-  // ===========================
+    doc.text("No se registraron gastos en este mes.", 120, yCategoria);
+
+    doc.setTextColor(0);
+  } else {
+    categorias.forEach(([categoria, valor]) => {
+      doc.text(
+        `${categoria}: ${valor.toLocaleString("es-CO", {
+          style: "currency",
+          currency: "COP",
+          minimumFractionDigits: 0,
+        })}`,
+        120,
+        yCategoria,
+      );
+
+      yCategoria += 8;
+    });
+  }
 
   // ===========================
   // TABLA
   // ===========================
 
   // Ordenar por fecha de creación (más antiguo -> más reciente)
-  const movimientosOrdenados = [...movimientos].sort(
-    (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-  );
+  const movimientosOrdenados = [...movimientos].sort((a, b) => {
+    const fechaA = new Date(a.fecha);
+    const fechaB = new Date(b.fecha);
 
-  // Comenzar desde el saldo total actual
-  let saldo = saldoTotal;
+    if (fechaA.getTime() !== fechaB.getTime()) {
+      return fechaA - fechaB;
+    }
 
-  // Construir filas del más reciente al más antiguo
+    return new Date(a.createdAt) - new Date(b.createdAt);
+  });
+
+  const primerDiaMes = `${mes}-01`;
+
+  let saldo = todosMovimientos
+    .filter((m) => m.fecha.substring(0, 10) < primerDiaMes)
+    .reduce((total, movimiento) => {
+      return movimiento.tipo === "ingreso"
+        ? total + movimiento.valor
+        : total - movimiento.valor;
+    }, 0);
+
   const filas = [];
 
-  for (let i = movimientosOrdenados.length - 1; i >= 0; i--) {
-    const m = movimientosOrdenados[i];
+  for (const m of movimientosOrdenados) {
+    saldo += m.tipo === "ingreso" ? m.valor : -m.valor;
 
-    const fecha = m.fecha.substring(0, 10).split("-").reverse().join("/");
-
-    const valor =
+    filas.push([
+      m.fecha.substring(0, 10).split("-").reverse().join("/"),
+      m.descripcion,
+      m.tipo === "ingreso" ? "Ingreso" : "Egreso",
       (m.tipo === "ingreso" ? "+" : "-") +
-      m.valor.toLocaleString("es-CO", {
+        m.valor.toLocaleString("es-CO", {
+          style: "currency",
+          currency: "COP",
+          minimumFractionDigits: 0,
+        }),
+      saldo.toLocaleString("es-CO", {
         style: "currency",
         currency: "COP",
         minimumFractionDigits: 0,
-      });
-
-    const saldoTexto = saldo.toLocaleString("es-CO", {
-      style: "currency",
-      currency: "COP",
-      minimumFractionDigits: 0,
-    });
-
-    filas.push([
-      fecha,
-      m.descripcion,
-      m.tipo === "ingreso" ? "Ingreso" : "Egreso",
-      valor,
-      saldoTexto,
+      }),
     ]);
-
-    // Deshacer el movimiento para obtener el saldo anterior
-    if (m.tipo === "ingreso") {
-      saldo -= m.valor;
-    } else {
-      saldo += m.valor;
-    }
   }
+
+  filas.reverse();
 
   autoTable(doc, {
     startY: 123,

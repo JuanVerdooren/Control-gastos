@@ -31,6 +31,7 @@ function FormularioMovimiento({
   movimientos,
   mesSeleccionado,
   saldoTotal,
+  todosMovimientos,
 }) {
   const [formulario, setFormulario] = useState({
     tipo: "ingreso",
@@ -168,7 +169,7 @@ function FormularioMovimiento({
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        generarExtracto(movimientos, mesSeleccionado, saldoTotal);
+        generarExtracto(movimientos, mesSeleccionado, saldoTotal, todosMovimientos);
       }
     });
   };
