@@ -24,7 +24,6 @@ function TablaMovimientos({
   onEditar,
   onActualizar,
 }) {
-  const [actualizando, setActualizando] = useState(false);
   const [cantidadVisible, setCantidadVisible] = useState(5);
 
   const actualizarMovimientos = async () => {
@@ -63,35 +62,28 @@ function TablaMovimientos({
 
   return (
     <div className="card border-0 shadow rounded-4 mb-4">
-      <div className="card-header bg-success text-white rounded-top-4 py-2 d-flex align-items-center">
+      <div className="card-header bg-success text-white rounded-top-4 py-2 px-3 d-flex justify-content-between align-items-center">
         <h5 className="mb-0 fw-bold text-white">
           <FaListAlt className="me-2 mb-1" />
           Movimientos
         </h5>
 
-        <div className="mx-auto d-flex align-items-center fw-bold fs-6">
-          <FaCoins className="me-2" />-{" "}
-          {gastosHoy.toLocaleString("es-CO", {
-            style: "currency",
-            currency: "COP",
-            minimumFractionDigits: 0,
-          })}
+        <div className="text-end">
+          <small className="d-block text-white-50 fw-semibold">Hoy</small>
+
+          <div className="d-flex align-items-center justify-content-end fw-bold">
+            <FaCoins className="me-2" />
+
+            <span>
+              -{" "}
+              {gastosHoy.toLocaleString("es-CO", {
+                style: "currency",
+                currency: "COP",
+                minimumFractionDigits: 0,
+              })}
+            </span>
+          </div>
         </div>
-        <button
-          className="btn btn-light btn-sm rounded-circle"
-          title="Actualizar movimientos"
-          onClick={actualizarMovimientos}
-          disabled={actualizando}
-        >
-          {actualizando ? (
-            <span
-              className="spinner-border spinner-border-sm text-success"
-              role="status"
-            />
-          ) : (
-            <FaSyncAlt size={14} />
-          )}
-        </button>
       </div>
 
       <div className="card-body">
