@@ -223,6 +223,7 @@ function Dashboard({ cerrarSesion }) {
         mesSeleccionado={mesSeleccionado}
         saldoTotal={saldoTotal}
         todosMovimientos={movimientos}
+        usuario={usuario}
       />
       <TablaMovimientos
         movimientos={movimientosFiltrados}

@@ -24,6 +24,7 @@ const generarExtracto = async (
   mes,
   saldoTotal,
   todosMovimientos,
+  usuario,
 ) => {
   const doc = new jsPDF();
 
@@ -49,6 +50,14 @@ const generarExtracto = async (
 
   // Logo
   doc.addImage(logo, "PNG", 15, 10, 22, 22);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+
+  // Usuario
+  doc.text(`USERNAME: ${usuario}`, 195, 18, {
+    align: "right",
+  });
 
   // Título
   doc.setFont("helvetica", "bold");
